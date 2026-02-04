@@ -313,7 +313,17 @@ def deepseek_payment_classify(title: str, body: str, comments: str) -> Tuple[str
 # ---------------- Search / repo signals ----------------
 def search_issues(query: str, page: int, per_page: int) -> Dict[str, Any]:
     url = "https://api.github.com/search/issues"
-    return gh_get(url, params={"q": query, "page": page, "per_page": per_page, "sort": "updated", "order": "desc"})
+    try:
+        return gh_get(url, params={"q": query, "page": page, "per_page": per_page, "sort": "updated", "order": "desc"})
+    except requests.exceptions.HTTPError as e:
+        # GitHub Searchはクエリが1文字でもダメだと422で落ちる → そのクエリは捨てて継続
+        resp = getattr(e, "response", None)
+        code = getattr(resp, "status_code", None)
+        if code == 422:
+            log.warning(f"Search query rejected (422). Skip this query. q={query!r}")
+            return {"items": []}
+        raise
+
 
 def issue_comments(repo_full: str, number: int, per_page: int = 30) -> List[Dict[str, Any]]:
     url = f"https://api.github.com/repos/{repo_full}/issues/{number}/comments"
