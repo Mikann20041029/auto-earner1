@@ -337,11 +337,16 @@ def guess_language(repo_full: str) -> str:
 
 # A-mode search: prioritize escrow-ish hints
 SEARCH_QUERIES = [
-    'is:issue is:open (bounty OR reward OR payout OR paid) ("$" OR USD OR USDC OR USDT) in:title,body',
+    # 金額表現を "USD/USDC/USDT" に寄せる（$はAPIで422になりやすい）
+    'is:issue is:open (bounty OR reward OR payout OR paid) (USD OR USDC OR USDT) in:title,body',
+    # Algora hint
     'is:issue is:open (algora OR "algora.io") in:title,body,comments',
+    # Known bounty label
     'is:issue is:open label:bounty',
-    'is:issue is:open (bounty OR reward OR payout OR "paid") in:title,body',
+    # Broad fallback (still filtered strictly later)
+    'is:issue is:open (bounty OR reward OR payout OR paid) in:title,body',
 ]
+
 
 
 
