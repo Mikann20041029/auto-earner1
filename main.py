@@ -337,15 +337,12 @@ def guess_language(repo_full: str) -> str:
 
 # A-mode search: prioritize escrow-ish hints
 SEARCH_QUERIES = [
-    # Explicit amount + bounty-ish words
-    'is:issue is:open archived:false (bounty OR reward OR payout OR paid) ("$" OR USD OR USDC OR USDT) in:title,body',
-    # Algora hints
-    'is:issue is:open archived:false (algora OR "algora.io") in:title,body,comments',
-    # Known bounty label
-    'is:issue is:open archived:false label:bounty',
-    # Broader fallback (still filtered strictly later)
-    'is:issue is:open archived:false (bounty OR reward OR payout OR "paid") in:title,body',
+    'is:issue is:open (bounty OR reward OR payout OR paid) ("$" OR USD OR USDC OR USDT) in:title,body',
+    'is:issue is:open (algora OR "algora.io") in:title,body,comments',
+    'is:issue is:open label:bounty',
+    'is:issue is:open (bounty OR reward OR payout OR "paid") in:title,body',
 ]
+
 
 
 # ---------------- Bandit ----------------
