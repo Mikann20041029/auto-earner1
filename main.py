@@ -781,7 +781,8 @@ def deepseek_fix_patch(issue_title: str, issue_body: str, failing_pytest_output:
     return deepseek_chat_json(prompt, temperature=0.2, timeout=80)
 
 def is_python(language_hint: str) -> bool:
-    return (language_hint or "").lower() == "python"
+    return "python" in (language_hint or "").lower()
+
 
 def work(con: sqlite3.Connection) -> int:
     # if not DEEPSEEK_API_KEY:
