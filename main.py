@@ -51,7 +51,7 @@ EPSILON = float(os.getenv("EPSILON", "0.10"))
 MIN_PAYMENT_STRENGTH = float(os.getenv("MIN_PAYMENT_STRENGTH", "0.85"))  # A-mode: strict
 
 # PR automation caps
-BOT_MAX_PR_PER_RUN = int(os.getenv("BOT_MAX_PR_PER_RUN", "1"))  # keep low to protect reputation
+BOT_MAX_PR_PER_RUN = int(os.getenv("BOT_MAX_PR_PER_RUN", "5"))  # keep low to protect reputation
 WORK_TIMEOUT_SEC = int(os.getenv("WORK_TIMEOUT_SEC", "900"))
 WORK_MAX_AUTOFIX = int(os.getenv("WORK_MAX_AUTOFIX", "2"))
 
