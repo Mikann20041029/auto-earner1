@@ -403,9 +403,6 @@ def compute_base_score(title: str, strength: float, amount_usd: Optional[float],
     s += 2.8 * float(strength or 0.0)
     if amount_usd is not None:
         s += 0.6 * math.log(1.0 + float(amount_usd))
-          if amount_usd is not None:
-        s += 0.6 * math.log(1.0 + float(amount_usd))
-
         # ---- amount shaping: favor $50-$200, penalize >$300 ----
         amt = float(amount_usd)
         if 50.0 <= amt <= 200.0:
