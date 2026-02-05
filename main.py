@@ -470,7 +470,8 @@ def collect(con: sqlite3.Connection) -> int:
                 claim, strength, amt, payout = deepseek_payment_classify(title, body[:2400], comments_snip)
 
                 akey = arm_key(lang, payout, has_amount=(amt is not None))
-                base = compute_base_score(title, strength, amt, comments_count, payout)
+                base = compute_base_score(strength, amt, comments_count, payout)
+
 
 
                 total_n = max(1, total_arm_counts(con))
