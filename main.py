@@ -990,7 +990,7 @@ def work(con: sqlite3.Connection) -> int:
 def report(con: sqlite3.Connection) -> None:
     rows = con.execute(
         """
-        SELECT a.id, a.status, a.pr_url, c.final_score, c.payment_amount_usd, c.payout_hint, c.issue_url, c.title
+        SELECT a.id, a.status, a.notes, a.pr_url, c.final_score, c.payment_amount_usd, c.payout_hint, c.issue_url, c.title
         FROM attempts a
         JOIN candidates c ON c.id=a.candidate_id
         ORDER BY a.created_at DESC
