@@ -393,7 +393,12 @@ def update_arm(con: sqlite3.Connection, key: str, reward: float) -> None:
 
 
 # ---------------- Scoring ----------------
-def compute_base_score(strength: float, amount_usd: Optional[float], comments_count: int, payout_hint: str) -> float:
+def compute_base_score(title: str, strength: float, amount_usd: Optional[float], comments_count: int, payout_hint: str) -> float:
+    t = (title or "").lower()
+    BAD_TITLE = ["implement", "design", "refactor", "rewrite", "migrate", "support", "scheduler"]
+    if any(w in t for w in BAD_TITLE):
+        return -999.0
+
     s = 0.0
     s += 2.8 * float(strength or 0.0)
     if amount_usd is not None:
