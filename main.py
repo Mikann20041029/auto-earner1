@@ -999,7 +999,7 @@ def report(con: sqlite3.Connection) -> None:
     ).fetchall()
 
     log.info("Attempts (latest 30):")
-    for a_id, st, pr, score, amt, pay, url, title in rows:
+    for a_id, st, notes, pr, score, amt, pay, url, title in rows:
         log.info(f"#{a_id} {st} score={float(score or 0):.2f} amt={amt} pay={pay} | {pr or '-'} | {url}")
 
     arms = con.execute("SELECT arm_key, n, mean_reward FROM arms ORDER BY mean_reward DESC, n DESC LIMIT 15").fetchall()
