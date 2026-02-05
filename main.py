@@ -514,8 +514,7 @@ def rescore_all(con: sqlite3.Connection) -> None:
     now = iso(utc_now())
 
     for cid, updated_at, strength, amt, comments, payout, lang, akey in rows:
-        def compute_base_score(strength: float, amount_usd: Optional[float], comments_count: int, payout_hint: str) -> float:
-
+        base = compute_base_score(float(strength or 0.0), float(amt) if amt is not None else None, int(comments or 0), str(payout or ""))
         n, mean = get_arm(con, str(akey or "unknown:unknown:noamt"))
         bandit = ucb_score(n, mean, total_n)
         final = base + 0.35 * bandit + recency_penalty(str(updated_at or ""))
