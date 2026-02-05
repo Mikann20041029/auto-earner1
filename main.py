@@ -398,6 +398,18 @@ def compute_base_score(strength: float, amount_usd: Optional[float], comments_co
     s += 2.8 * float(strength or 0.0)
     if amount_usd is not None:
         s += 0.6 * math.log(1.0 + float(amount_usd))
+          if amount_usd is not None:
+        s += 0.6 * math.log(1.0 + float(amount_usd))
+
+        # ---- amount shaping: favor $50-$200, penalize >$300 ----
+        amt = float(amount_usd)
+        if 50.0 <= amt <= 200.0:
+            s += 2.0
+        elif 200.0 < amt <= 300.0:
+            s += 0.5
+        elif amt > 300.0:
+            s -= 1.5
+
     s += 0.06 * math.log(1.0 + max(0, int(comments_count or 0)))
     # escrow-ish bonus
     if (payout_hint or "").lower() in ("algora", "gitcoin", "opencollective", "issuehunt"):
