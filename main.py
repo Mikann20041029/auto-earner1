@@ -784,6 +784,25 @@ def work(con: sqlite3.Connection) -> int:
         """,
         (BOT_MAX_PR_PER_RUN,),
     ).fetchall()
+    # --- FORCE EXPLORE (bootstrap): widen fetch until we have at least one python row ---
+    if rows:
+        # If the top-N queued are all non-python, fetch more and filter to python so Work can actually try.
+        if all((not is_python(r[-1])) for r in rows):
+            more = con.execute(
+                """
+                SELECT a.id, a.candidate_id, c.repo_full_name, c.issue_number, c.issue_url, c.title, c.body_snip, c.language_hint
+                FROM attempts a
+                JOIN candidates c ON c.id=a.candidate_id
+                WHERE a.status='queued'
+                ORDER BY c.final_score DESC
+                LIMIT ?
+                """,
+                (max(BOT_MAX_PR_PER_RUN * 20, 100),),
+            ).fetchall()
+
+            py_rows = [r for r in more if is_python(r[-1])]
+            if py_rows:
+                rows = py_rows[:BOT_MAX_PR_PER_RUN]
 
     if not rows:
         log.info("No queued attempts.")
