@@ -784,9 +784,10 @@ def is_python(language_hint: str) -> bool:
     return (language_hint or "").lower() == "python"
 
 def work(con: sqlite3.Connection) -> int:
-    if not DEEPSEEK_API_KEY:
-        log.info("DEEPSEEK_API_KEY missing -> PR automation disabled.")
-        return 0
+    # if not DEEPSEEK_API_KEY:
+    #     log.info("DEEPSEEK_API_KEY missing -> PR automation disabled.")
+    #     return 0
+
 
     rows = con.execute(
         """
