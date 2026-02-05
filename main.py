@@ -393,17 +393,14 @@ def update_arm(con: sqlite3.Connection, key: str, reward: float) -> None:
 
 
 # ---------------- Scoring ----------------
-def compute_base_score(title: str, strength: float, amount_usd: Optional[float], comments_count: int, payout_hint: str) -> float:
-    t = (title or "").lower()
-    BAD_TITLE = ["implement", "design", "refactor", "rewrite", "migrate", "support", "scheduler"]
-    if any(w in t for w in BAD_TITLE):
-        return -999.0
-
+def compute_base_score(strength: float, amount_usd: Optional[float], comments_count: int, payout_hint: str) -> float:
     s = 0.0
     s += 2.8 * float(strength or 0.0)
+
     if amount_usd is not None:
         s += 0.6 * math.log(1.0 + float(amount_usd))
-        # ---- amount shaping: favor $50-$200, penalize >$300 ----
+
+        # --- amount shaping: favor $50-$200, penalize >$300 ---
         amt = float(amount_usd)
         if 50.0 <= amt <= 200.0:
             s += 2.0
@@ -413,10 +410,12 @@ def compute_base_score(title: str, strength: float, amount_usd: Optional[float],
             s -= 1.5
 
     s += 0.06 * math.log(1.0 + max(0, int(comments_count or 0)))
-    # escrow-ish bonus
+
     if (payout_hint or "").lower() in ("algora", "gitcoin", "opencollective", "issuehunt"):
         s += 0.25
+
     return s
+
 
 def recency_penalty(updated_at: str) -> float:
     try:
