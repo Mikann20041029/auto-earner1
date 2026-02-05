@@ -826,11 +826,11 @@ def work(con: sqlite3.Connection) -> int:
 
     created = 0
     for attempt_id, cand_id, upstream_full, issue_number, issue_url, title, body_snip, lang in rows:
-        if not is_python(lang):
-            con.execute("UPDATE attempts SET status=?, notes=?, updated_at=? WHERE id=?",
-                        ("ignored", "non_python_repo", iso(utc_now()), attempt_id))
-            con.commit()
-            continue
+        # if not is_python(lang):
+              # con.execute("UPDATE attempts SET status=?, notes=?, updated_at=? WHERE id=?",
+                          # ("ignored", "non_python_repo", iso(utc_now()), attempt_id))
+              # con.commit()
+              # continue
 
         con.execute("UPDATE attempts SET status=?, notes=?, updated_at=? WHERE id=?",
                     ("working", "start", iso(utc_now()), attempt_id))
